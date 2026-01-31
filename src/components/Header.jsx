@@ -1,7 +1,8 @@
 import React from 'react';
 import ProfileModal from './ProfileModal';
+import Searchbar from './Searchbar';
 
-const Header = ({ profile, onUpdateProfile }) => {
+const Header = ({ profile, onUpdateProfile, handleSearch }) => {
     return (
         <div className="navbar bg-base-100 shadow-sm flex">
             <div className="flex-1">
@@ -9,7 +10,10 @@ const Header = ({ profile, onUpdateProfile }) => {
                     Personal Diary
                 </a>
             </div>
-            <div className="flex gap-8">
+            <div className="flex-none w-1/2 max-w-xl">
+                <Searchbar handleSearch={handleSearch} />
+            </div>
+            <div className="flex-1 flex justify-end gap-8">
                 <div className="flex gap-8 mr-4">
                     <dialog id="my_profile_modal" className="modal">
                         <ProfileModal

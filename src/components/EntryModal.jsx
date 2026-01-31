@@ -104,7 +104,7 @@ const EntryModal = ({ onAddEntry, onUpdateEntry, entryToEdit }) => {
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
-                    className="input bg-white text-black"
+                    className="input bg-white text-black [color-scheme:light]"
                 />
                 <textarea
                     className="textarea bg-white text-black"

@@ -25,10 +25,17 @@ const Hero = ({ onAddEntry, profile }) => {
                     <EntryModal onAddEntry={onAddEntry} />
                 </dialog>
             </div>
-            <div className="avatar">
-                <div className="ring-primary ring-offset-base-100 w-48 rounded-full ring-2 ring-offset-2">
-                    <img src={profile.img} />
+            <div className="space-y-8 flex flex-col justify-center items-center">
+                <div className="avatar">
+                    <div className="ring-primary ring-offset-base-100 w-48 rounded-full ring-2 ring-offset-2">
+                        <img src={profile.img} />
+                    </div>
                 </div>
+                {profile.status && (
+                    <div className="chat-bubble italic bg-white text-black text-sm">
+                        "{profile.status}"
+                    </div>
+                )}
             </div>
         </div>
     );

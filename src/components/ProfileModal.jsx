@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 const ProfileModal = ({ currentProfile, onUpdateProfile }) => {
     const [profile, setProfile] = useState({
-        img: '',
+        img: 'https://pngtree.com/so/avatar-placeholder',
         name: '',
         status: '',
         bio: '',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Card from './components/Card';
@@ -13,6 +13,13 @@ const App = () => {
         const saved = localStorage.getItem('profile');
         return saved ? JSON.parse(saved) : {};
     });
+
+    // Search Logic
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
     // CRUD Logic
     const handleAddEntry = (newEntry) => {
@@ -44,7 +51,25 @@ const App = () => {
 
     // Timeline structure by .sort() method
     const groupedEntries = useMemo(() => {
-        const sortedEntries = [...entries].sort(
+        let filteredEntries = entries;
+        if (searchTerm) {
+            filteredEntries = entries.filter((entry) => {
+                const term = searchTerm.toLowerCase();
+                const entryDate = new Date(entry.date);
+                const month = entryDate
+                    .toLocaleString('default', { month: 'long' })
+                    .toLowerCase();
+                const year = entryDate.getFullYear().toString();
+                return (
+                    entry.title.toLowerCase().includes(term) ||
+                    entry.date.includes(term) ||
+                    month.includes(term) ||
+                    year.includes(term)
+                );
+            });
+        }
+
+        const sortedEntries = [...filteredEntries].sort(
             (a, b) => new Date(b.date) - new Date(a.date),
         );
 
@@ -73,11 +98,15 @@ const App = () => {
         });
 
         return groups;
-    }, [entries]);
+    }, [entries, searchTerm]);
 
     return (
         <div>
-            <Header profile={profile} onUpdateProfile={updateProfile} />
+            <Header
+                profile={profile}
+                onUpdateProfile={updateProfile}
+                handleSearch={handleSearch}
+            />
             <div className="mt-8 flex flex-col gap-8">
                 <Hero profile={profile} onAddEntry={handleAddEntry} />
                 <div className="flex flex-col gap-8 mx-auto w-full max-w-7xl px-8 mb-8">
