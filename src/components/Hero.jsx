@@ -32,7 +32,7 @@ const Hero = ({ onAddEntry, profile }) => {
                     </div>
                 </div>
                 {profile.status && (
-                    <div className="chat-bubble italic bg-white text-black text-sm">
+                    <div className="chat-bubble italic bg-white text-black text-sm text-center">
                         "{profile.status}"
                     </div>
                 )}
