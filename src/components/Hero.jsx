@@ -5,9 +5,9 @@ const Hero = ({ onAddEntry, profile }) => {
     return (
         <div className="flex flex-wrap justify-evenly items-center gap-8">
             <div className="flex flex-col justify-evenly items-center gap-8">
-                <h2 className="text-4xl font-bold">
+                <h2 className="text-[clamp(2rem,12vw,4rem)] font-bold">
                     Welcome,{' '}
-                    <span className="text-accent font-bold text-4xl">
+                    <span className="text-accent font-bold text-[clamp(2rem,12vw,4rem)]">
                         {profile.name}
                     </span>
                     ...

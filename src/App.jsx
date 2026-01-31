@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Card from './components/Card';
@@ -14,6 +14,7 @@ const App = () => {
         return saved ? JSON.parse(saved) : {};
     });
 
+    // CRUD Logic
     const handleAddEntry = (newEntry) => {
         const updatedEntries = [newEntry, ...entries];
 
@@ -41,22 +42,75 @@ const App = () => {
         localStorage.setItem('DiaryEntries', JSON.stringify(updatedEntries));
     };
 
+    // Timeline structure by .sort() method
+    const groupedEntries = useMemo(() => {
+        const sortedEntries = [...entries].sort(
+            (a, b) => new Date(b.date) - new Date(a.date),
+        );
+
+        const groups = [];
+
+        // Date destructuring
+        sortedEntries.forEach((entry) => {
+            const [yearStr, monthStr, dayStr] = entry.date.split('-');
+            const date = new Date(yearStr, monthStr - 1, dayStr);
+            const year = date.getFullYear();
+            const month = date.toLocaleString('default', { month: 'long' });
+
+            let yearGroup = groups.find((g) => g.year === year);
+            if (!yearGroup) {
+                yearGroup = { year, months: [] };
+                groups.push(yearGroup);
+            }
+
+            let monthGroup = yearGroup.months.find((m) => m.name === month);
+            if (!monthGroup) {
+                monthGroup = { name: month, entries: [] };
+                yearGroup.months.push(monthGroup);
+            }
+
+            monthGroup.entries.push(entry);
+        });
+
+        return groups;
+    }, [entries]);
+
     return (
         <div>
             <Header profile={profile} onUpdateProfile={updateProfile} />
             <div className="mt-8 flex flex-col gap-8">
                 <Hero profile={profile} onAddEntry={handleAddEntry} />
-                <div className="flex flex-wrap mx-auto">
-                    <div className="m-8 flex flex-row flex-wrap justify-center gap-4">
-                        {entries.map((entry) => (
-                            <Card
-                                key={entry.id}
-                                entry={entry}
-                                onDelete={handleDeleteEntry}
-                                onUpdate={updateEntry}
-                            />
-                        ))}
-                    </div>
+                <div className="flex flex-col gap-8 mx-auto w-full max-w-7xl px-8 mb-8">
+                    {groupedEntries.map((yearGroup) => (
+                        <div
+                            key={yearGroup.year}
+                            className="flex flex-col gap-4"
+                        >
+                            <h2 className="text-4xl font-bold opacity-50 border-b-2 border-base-300 pb-2">
+                                {yearGroup.year}
+                            </h2>
+                            {yearGroup.months.map((monthGroup) => (
+                                <div
+                                    key={monthGroup.name}
+                                    className="flex flex-col gap-4"
+                                >
+                                    <h3 className="text-2xl font-semibold text-accent">
+                                        {monthGroup.name}
+                                    </h3>
+                                    <div className="flex flex-row flex-wrap gap-4">
+                                        {monthGroup.entries.map((entry) => (
+                                            <Card
+                                                key={entry.id}
+                                                entry={entry}
+                                                onDelete={handleDeleteEntry}
+                                                onUpdate={updateEntry}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ))}
                 </div>
             </div>
             <Footer />
