@@ -5,7 +5,7 @@ import Searchbar from './Searchbar';
 const Header = ({ profile, onUpdateProfile, handleSearch }) => {
     return (
         <div className="navbar bg-base-100 shadow-sm flex">
-            <div className="flex-1">
+            <div className="flex-1 hidden lg:block">
                 <a className="btn btn-ghost text-xl text-accent font-bold">
                     Personal Diary
                 </a>
